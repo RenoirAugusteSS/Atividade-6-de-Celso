@@ -1,60 +1,45 @@
 #include <stdio.h>
+#include <string.h>
+#define NUM_LIVROS 5
+typedef struct{
+    char TituloDoLivro[31]; // Máximo de 30 caracteres + '\0' para a string
+    char AutorDoLivro[16];  // Máximo de 15 caracteres + '\0' para a string
+    int AnoDePublicacao;
+}Livro;
 
-typedef struct {
-    int codigo;
-    char nome[50];
-    double preco;
-} Produto;
-
-typedef struct {
-    Produto produto;
-    int quantidade;
-} ItemVenda;
-
-typedef struct {
-    int codigoVenda;
-    ItemVenda itens[5];
-    double total;
-} Venda;
-
-int main() {
-    Produto produtos[5];
-    Venda vendas[5];
-    int i, j;
-
-    // Cadastro de produtos
-    for (i = 0; i < 5; i++) {
-        printf("Digite o código do produto %d: ", i + 1);
-        scanf("%d", &produtos[i].codigo);
-        printf("Digite o nome do produto %d: ", i + 1);
-        getchar(); // Limpar o buffer
-        fgets(produtos[i].nome, 50, stdin);
-        printf("Digite o preço do produto %d: ", i + 1);
-        scanf("%lf", &produtos[i].preco);
+int main(){
+    Livro livros[NUM_LIVROS];
+    for(int i = 0; i < NUM_LIVROS; i++){
+        printf("Digite o título do livro %d: ", i + 1);
+        fgets(livros[i].TituloDoLivro, 31, stdin);
+        livros[i].TituloDoLivro[strcspn(livros[i].TituloDoLivro, "\n")] = 0;
+        printf("Digite o autor do livro %d: ", i + 1);
+        fgets(livros[i].AutorDoLivro, 16, stdin);
+        livros[i].AutorDoLivro[strcspn(livros[i].AutorDoLivro, "\n")] = 0;
+        printf("Digite o ano de publicação do livro %d: ", i + 1);
+        scanf("%d", &livros[i].AnoDePublicacao);
+        getchar();
     }
-
-    // Registro de vendas
-    for (i = 0; i < 5; i++) {
-        vendas[i].codigoVenda = i + 1;
-        vendas[i].total = 0;
-        printf("\nVenda %d\n", i + 1);
-        for (j = 0; j < 5; j++) {
-            vendas[i].itens[j].produto = produtos[j];
-            printf("Digite a quantidade vendida do produto %s: ", produtos[j].nome);
-            scanf("%d", &vendas[i].itens[j].quantidade);
-            vendas[i].total += vendas[i].itens[j].produto.preco * vendas[i].itens[j].quantidade;
+    char TituloBuscado[31];
+    while (1){
+        printf("Digite o título do livro que deseja buscar (ou 'sair' para sair): ");
+        fgets(TituloBuscado, 31, stdin);
+        TituloBuscado[strcspn(TituloBuscado, "\n")] = 0;
+        if (strcmp(TituloBuscado, "sair") == 0) {
+            printf("Saindo...");
+            break;
+        }
+        printf("Livros encontrados com o título '%s':\n", TituloBuscado);
+        int encontrouLivro = 0;
+        for (int i = 0; i < NUM_LIVROS; i++) {
+            if (strcmp(livros[i].TituloDoLivro, TituloBuscado) == 0) {
+                printf("Título: %s, Nome do Autor: %s, Ano de Publicação: %d\n", livros[i].TituloDoLivro, livros[i].AutorDoLivro, livros[i].AnoDePublicacao);
+                encontrouLivro = 1;
+            }
+        }
+        if (!encontrouLivro) {
+            printf("Nenhum livro encontrado com esse título '%s'.\n", TituloBuscado);
         }
     }
-
-    // Exibição das vendas
-    for (i = 0; i < 5; i++) {
-        printf("\nDetalhes da Venda %d:\n", vendas[i].codigoVenda);
-        for (j = 0; j < 5; j++) {
-            printf("Produto: %s", vendas[i].itens[j].produto.nome);
-            printf("Quantidade: %d\n", vendas[i].itens[j].quantidade);
-        }
-        printf("Total da Venda: %.2lf\n", vendas[i].total);
-    }
-
     return 0;
 }

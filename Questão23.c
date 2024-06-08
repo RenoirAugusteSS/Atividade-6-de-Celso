@@ -1,55 +1,46 @@
 #include <stdio.h>
+struct DiaMesAno {
+    int dia;
+    int mes;
+    int ano;
+};
 
-typedef struct {
-    char nome[50];
-    int idade;
-    char sexo;
-    char cpf[15];
-    char dataNascimento[11];
-    int codigoSetor;
-    char cargo[30];
-    double salario;
-} Funcionario;
+int Bissexto(int ano) {
+    return (ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0);
+}
+
+int DiasNoMes(int mes, int ano) {
+    switch (mes) {
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            return 31;
+        case 4: case 6: case 9: case 11:
+            return 30;
+        case 2:
+            return Bissexto(ano) ? 29 : 28;
+        default:
+            return 0;
+    }
+}
+
+int DiasBase(struct DiaMesAno data) {
+    int dias = 0;
+    for (int ano = 0; ano < data.ano; ano++) {
+        dias += Bissexto(ano) ? 366 : 365;
+    }
+    for (int mes = 1; mes < data.mes; mes++) {
+        dias += DiasNoMes(mes, data.ano);
+    }
+    dias += data.dia;
+    return dias;
+}
+
+int diferencaEmDias(struct DiaMesAno data1, struct DiaMesAno data2) {
+    return DiasBase(data2) - DiasBase(data1);
+}
 
 int main() {
-    Funcionario funcionarios[5];
-    int i;
-
-    for (i = 0; i < 5; i++) {
-        printf("Digite o nome do funcionário %d: ", i + 1);
-        fgets(funcionarios[i].nome, 50, stdin);
-        printf("Digite a idade do funcionário %d: ", i + 1);
-        scanf("%d", &funcionarios[i].idade);
-        getchar(); // Limpar o buffer
-        printf("Digite o sexo do funcionário %d (M/F): ", i + 1);
-        scanf("%c", &funcionarios[i].sexo);
-        getchar(); // Limpar o buffer
-        printf("Digite o CPF do funcionário %d: ", i + 1);
-        fgets(funcionarios[i].cpf, 15, stdin);
-        printf("Digite a data de nascimento do funcionário %d: ", i + 1);
-        scanf("%s", funcionarios[i].dataNascimento);
-        getchar(); // Limpar o buffer
-        printf("Digite o código do setor do funcionário %d: ", i + 1);
-        scanf("%d", &funcionarios[i].codigoSetor);
-        getchar(); // Limpar o buffer
-        printf("Digite o cargo do funcionário %d: ", i + 1);
-        fgets(funcionarios[i].cargo, 30, stdin);
-        printf("Digite o salário do funcionário %d: ", i + 1);
-        scanf("%lf", &funcionarios[i].salario);
-        getchar(); // Limpar o buffer
-    }
-
-    printf("\nFuncionários cadastrados:\n");
-    for (i = 0; i < 5; i++) {
-        printf("Nome: %s", funcionarios[i].nome);
-        printf("Idade: %d\n", funcionarios[i].idade);
-        printf("Sexo: %c\n", funcionarios[i].sexo);
-        printf("CPF: %s", funcionarios[i].cpf);
-        printf("Data de Nascimento: %s\n", funcionarios[i].dataNascimento);
-        printf("Código do Setor: %d\n", funcionarios[i].codigoSetor);
-        printf("Cargo: %s", funcionarios[i].cargo);
-        printf("Salário: %.2lf\n\n", funcionarios[i].salario);
-    }
-
+    struct DiaMesAno data1 = {1, 1, 2020};
+    struct DiaMesAno data2 = {1, 1, 2021};
+    printf("A diferença em dias é: %d\n", diferencaEmDias(data1, data2));
     return 0;
 }

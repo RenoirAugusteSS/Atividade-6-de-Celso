@@ -1,62 +1,46 @@
 #include <stdio.h>
 #include <string.h>
+typedef struct{
+    char Nome[100];
+    char Endereco[200];
+    char Telefone[15];
+}Pessoa;
 
-// Definindo a estrutura para armazenar os dados das pessoas
-typedef struct {
-    char nome[100];
-    char endereco[200];
-    char telefone[15];
-} Pessoa;
-
-// Função para trocar duas pessoas de lugar
-void troca(Pessoa *a, Pessoa *b) {
+void Troca(Pessoa *a, Pessoa *b){
     Pessoa temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// Função para ordenar as pessoas pelo nome em ordem alfabética
-void ordenarPessoas(Pessoa pessoas[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (strcmp(pessoas[i].nome, pessoas[j].nome) > 0) {
-                troca(&pessoas[i], &pessoas[j]);
+void OrdenAlfabatica(Pessoa pessoas[], int n){
+    for(int i = 0; i < n - 1; i++){
+        for(int j = i + 1; j < n; j++){
+            if(strcmp(pessoas[i].Nome, pessoas[j].Nome) > 0){
+                Troca(&pessoas[i], &pessoas[j]);
             }
         }
     }
 }
 
-int main() {
+int main(){
     Pessoa pessoas[5];
-
-    // Lendo os dados das 5 pessoas
-    for (int i = 0; i < 5; i++) {
-        printf("Digite o nome da pessoa %d: ", i + 1);
-        fgets(pessoas[i].nome, sizeof(pessoas[i].nome), stdin);
-        // Remover o newline do final da string
-        pessoas[i].nome[strcspn(pessoas[i].nome, "\n")] = 0;
-
-        printf("Digite o endereco da pessoa %d: ", i + 1);
-        fgets(pessoas[i].endereco, sizeof(pessoas[i].endereco), stdin);
-        // Remover o newline do final da string
-        pessoas[i].endereco[strcspn(pessoas[i].endereco, "\n")] = 0;
-
-        printf("Digite o telefone da pessoa %d: ", i + 1);
-        fgets(pessoas[i].telefone, sizeof(pessoas[i].telefone), stdin);
-        // Remover o newline do final da string
-        pessoas[i].telefone[strcspn(pessoas[i].telefone, "\n")] = 0;
+    for(int i = 0; i < 5; i++){
+        printf("Digite o Nome da pessoa %d: ", i + 1);
+        fgets(pessoas[i].Nome, sizeof(pessoas[i].Nome), stdin);
+        pessoas[i].Nome[strcspn(pessoas[i].Nome, "\n")] = 0;
+        printf("Digite o Endereco da pessoa %d: ", i + 1);
+        fgets(pessoas[i].Endereco, sizeof(pessoas[i].Endereco), stdin);
+        pessoas[i].Endereco[strcspn(pessoas[i].Endereco, "\n")] = 0;
+        printf("Digite o Telefone da pessoa %d: ", i + 1);
+        fgets(pessoas[i].Telefone, sizeof(pessoas[i].Telefone), stdin);
+        pessoas[i].Telefone[strcspn(pessoas[i].Telefone, "\n")] = 0;
     }
-
-    // Ordenando as pessoas pelo nome
-    ordenarPessoas(pessoas, 5);
-
-    // Exibindo os dados das pessoas em ordem alfabética
+    OrdenAlfabatica(pessoas, 5);
     printf("\nDados das pessoas em ordem alfabética:\n");
-    for (int i = 0; i < 5; i++) {
-        printf("Nome: %s\n", pessoas[i].nome);
-        printf("Endereco: %s\n", pessoas[i].endereco);
-        printf("Telefone: %s\n\n", pessoas[i].telefone);
+    for(int i = 0; i < 5; i++){
+        printf("Nome: %s\n", pessoas[i].Nome);
+        printf("Endereco: %s\n", pessoas[i].Endereco);
+        printf("Telefone: %s\n\n", pessoas[i].Telefone);
     }
-
     return 0;
 }

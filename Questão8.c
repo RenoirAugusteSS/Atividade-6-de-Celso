@@ -1,60 +1,46 @@
 #include <stdio.h>
-
-// Definindo a estrutura para armazenar os dados do funcionário
 typedef struct {
-    char nome[100];
-    int idade;
-    char sexo;
-    char cpf[12];
-    char dataNascimento[11];
-    int codigoSetor;
-    char cargo[31];
-    double salario;
+    char NomeDoFuncionario[100];
+    int IdadeDoFuncionario;
+    char SexoDoFuncionario;
+    char CPF[12];
+    char DataNascimento[11];
+    int CodigoDoSetor;
+    char CargoDoFuncionario[31];
+    double SalarioDoFuncionario;
 } Funcionario;
 
 int main() {
-    Funcionario funcionario;
-
-    // Lendo os dados do funcionário
+    Funcionario funcionarios;
     printf("Digite o nome do funcionário: ");
-    fgets(funcionario.nome, sizeof(funcionario.nome), stdin);
-
+    fgets(funcionarios.NomeDoFuncionario, sizeof(funcionarios.NomeDoFuncionario), stdin);
     printf("Digite a idade do funcionário: ");
-    scanf("%d", &funcionario.idade);
-    getchar(); // Limpa o buffer do stdin
-
+    scanf("%d", &funcionarios.IdadeDoFuncionario);
+    getchar(); 
     printf("Digite o sexo do funcionário (M/F): ");
-    scanf("%c", &funcionario.sexo);
-    getchar(); // Limpa o buffer do stdin
-
+    scanf("%c", &funcionarios.SexoDoFuncionario);
+    getchar();
     printf("Digite o CPF do funcionário (somente números): ");
-    scanf("%s", funcionario.cpf);
-    getchar(); // Limpa o buffer do stdin
-
+    scanf("%s", funcionarios.CPF);
+    getchar();
     printf("Digite a data de nascimento do funcionário (dd/mm/aaaa): ");
-    scanf("%s", funcionario.dataNascimento);
-    getchar(); // Limpa o buffer do stdin
-
+    scanf("%s", funcionarios.DataNascimento);
+    getchar();
     printf("Digite o código do setor onde o funcionário trabalha (0-99): ");
-    scanf("%d", &funcionario.codigoSetor);
-    getchar(); // Limpa o buffer do stdin
-
+    scanf("%d", &funcionarios.CodigoDoSetor);
+    getchar();
     printf("Digite o cargo que o funcionário ocupa: ");
-    fgets(funcionario.cargo, sizeof(funcionario.cargo), stdin);
-
+    fgets(funcionarios.CargoDoFuncionario, sizeof(funcionarios.CargoDoFuncionario), stdin);
     printf("Digite o salário do funcionário: ");
-    scanf("%lf", &funcionario.salario);
-
-    // Exibindo os dados do funcionário
+    scanf("%lf", &funcionarios.SalarioDoFuncionario);
     printf("\nDados do Funcionário:\n");
-    printf("Nome: %s", funcionario.nome);
-    printf("Idade: %d\n", funcionario.idade);
-    printf("Sexo: %c\n", funcionario.sexo);
-    printf("CPF: %s\n", funcionario.cpf);
-    printf("Data de Nascimento: %s\n", funcionario.dataNascimento);
-    printf("Código do Setor: %d\n", funcionario.codigoSetor);
-    printf("Cargo: %s", funcionario.cargo);
-    printf("Salário: %.2lf\n", funcionario.salario);
-
+    printf("Nome: %s", funcionarios.NomeDoFuncionario);
+    printf("Idade: %d\n", funcionarios.IdadeDoFuncionario);
+    printf("Sexo: %c\n", funcionarios.SexoDoFuncionario);
+    printf("CPF: %s\n", funcionarios.CPF);
+    printf("Data de Nascimento: %s\n", funcionarios.DataNascimento);
+    printf("Código do Setor: %d\n", funcionarios.CodigoDoSetor);
+    printf("Cargo: %s", funcionarios.CargoDoFuncionario);
+    printf("Salário: %.2lf\n", funcionarios.SalarioDoFuncionario);
     return 0;
 }

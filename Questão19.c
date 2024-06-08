@@ -1,35 +1,50 @@
 #include <stdio.h>
 
+#define V 5  // Número de voos
+#define A 5  // Número de aeroportos
+
 typedef struct {
-    char titulo[50];
-    char diretor[50];
-    int anoLancamento;
-    char genero[20];
-} Filme;
+    int OrigemDoVoo;
+    int DestinoDoVoo;
+} Voo;
+
+typedef struct {
+    int CodigoDoAero;
+    int VoosDeSaida;
+    int VoosDeChegada;
+} Aeroporto;
 
 int main() {
-    Filme filmes[5];
-    int i;
-
-    for (i = 0; i < 5; i++) {
-        printf("Digite o título do filme %d: ", i + 1);
-        fgets(filmes[i].titulo, 50, stdin);
-        printf("Digite o diretor do filme %d: ", i + 1);
-        fgets(filmes[i].diretor, 50, stdin);
-        printf("Digite o ano de lançamento do filme %d: ", i + 1);
-        scanf("%d", &filmes[i].anoLancamento);
-        getchar(); // Limpar o buffer
-        printf("Digite o gênero do filme %d: ", i + 1);
-        fgets(filmes[i].genero, 20, stdin);
+    Voo voos[V];
+    Aeroporto aeroportos[A];
+    for(int i = 0; i < A; i++){
+        aeroportos[i].CodigoDoAero = i;
+        aeroportos[i].VoosDeSaida = 0;
+        aeroportos[i].VoosDeChegada = 0;
     }
-
-    printf("\nFilmes cadastrados:\n");
-    for (i = 0; i < 5; i++) {
-        printf("Título: %s", filmes[i].titulo);
-        printf("Diretor: %s", filmes[i].diretor);
-        printf("Ano de Lançamento: %d\n", filmes[i].anoLancamento);
-        printf("Gênero: %s\n\n", filmes[i].genero);
+    for(int i = 0; i < V; i++){
+        int OrigemDoVoo, DestinoDoVoo;
+        printf("Digite o código do aeroporto de origem do voo %d: ", i + 1);
+        scanf("%d", &OrigemDoVoo);
+        while(OrigemDoVoo < 0 || OrigemDoVoo >= A){
+            printf("Código de aeroporto inexistente.");
+            printf("Digite um codigo existente (Codigo entre %d): ", A - 1);
+            scanf("%d", &OrigemDoVoo);
+        }
+        printf("Digite o código do aeroporto de destino do voo %d: ", i + 1);
+        scanf("%d", &DestinoDoVoo);
+        while(DestinoDoVoo < 0 || DestinoDoVoo >= A){
+            printf("Código de aeroporto inexistente.");
+            printf("Digite um codigo existente (Codigo entre %d): ", A - 1);
+            scanf("%d", &DestinoDoVoo);
+        }
+        voos[i].OrigemDoVoo = OrigemDoVoo;
+        voos[i].DestinoDoVoo = DestinoDoVoo;
+        aeroportos[OrigemDoVoo].VoosDeSaida++;
+        aeroportos[DestinoDoVoo].VoosDeChegada++;
     }
-
+    for(int i = 0; i < A; i++){
+        printf("Aeroporto %d: %d voos de saida, %d voos de chegada.\n", aeroportos[i].CodigoDoAero, aeroportos[i].VoosDeSaida, aeroportos[i].VoosDeChegada);
+    }
     return 0;
 }

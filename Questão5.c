@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct Vetor {
+struct Vetor{
   float x;
   float y;
   float z;
 };
 
-struct Vetor somaVetores(struct Vetor vt1, struct Vetor vt2) {
+struct Vetor somaVetores(struct Vetor vt1, struct Vetor vt2){
   struct Vetor vt3;
   vt3.x = vt1.x + vt2.x;
   vt3.y = vt1.y + vt2.y;
@@ -16,7 +16,7 @@ struct Vetor somaVetores(struct Vetor vt1, struct Vetor vt2) {
   return vt3;
 }
 
-struct Vetor VetorDeNumerosSorteados(void) {
+struct Vetor VetorDeNumerosSorteados(void){
   struct Vetor v;
   srand(time(NULL));
   v.x = rand() % 100;
@@ -25,7 +25,7 @@ struct Vetor VetorDeNumerosSorteados(void) {
   return v;
 }
 
-int main() {
+int main(){
   struct Vetor vetor1 = VetorDeNumerosSorteados();
   struct Vetor vetor2 = VetorDeNumerosSorteados();
   struct Vetor vetor3 = somaVetores(vetor1, vetor2);

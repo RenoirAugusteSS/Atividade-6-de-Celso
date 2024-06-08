@@ -1,62 +1,76 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-typedef struct {
-    char modelo[50];
-    char placa[10];
-    int ano;
-    double valorDiaria;
-} Carro;
+#define MAX_DIRETORES 5
+#define MAX_NOME 20
+#define MAX_FILMES 10
 
-typedef struct {
-    Carro carro;
-    char dataInicio[11];
-    char dataFim[11];
-    double valorTotal;
-} Aluguel;
+struct Filme {
+    char NomeDoFilme[MAX_NOME];
+    int AnoDePublicacao;
+    int Duracao;
+};
 
-int main() {
-    Carro carros[5];
-    Aluguel alugueis[5];
-    int i, dias;
+struct Diretor {
+    char NomeDoDiretor[MAX_NOME];
+    int QuantidadeDeFilmes;
+    struct Filme* filmes;
+};
 
-    // Cadastro de carros
-    for (i = 0; i < 5; i++) {
-        printf("Digite o modelo do carro %d: ", i + 1);
-        fgets(carros[i].modelo, 50, stdin);
-        printf("Digite a placa do carro %d: ", i + 1);
-        fgets(carros[i].placa, 10, stdin);
-        printf("Digite o ano do carro %d: ", i + 1);
-        scanf("%d", &carros[i].ano);
-        printf("Digite o valor da diária do carro %d: ", i + 1);
-        scanf("%lf", &carros[i].valorDiaria);
-        getchar(); // Limpar o buffer
+void preencherDiretores(struct Diretor diretores[], int tam){
+    for(int i = 0; i < tam; i++){
+        printf("Diretor %d:\n", i + 1);
+        printf("Nome: ");
+        scanf(" %[^\n]", diretores[i].NomeDoDiretor);
+        printf("Quantidade de filmes: ");
+        scanf("%d", &diretores[i].QuantidadeDeFilmes);
+        diretores[i].filmes = (struct Filme*) malloc(diretores[i].QuantidadeDeFilmes * sizeof(struct Filme));
+        for(int j = 0; j < diretores[i].QuantidadeDeFilmes; j++){
+            printf("Filme %d:\n", j + 1);
+            printf("Nome: ");
+            scanf(" %[^\n]", diretores[i].filmes[j].NomeDoFilme);
+            printf("Ano: ");
+            scanf("%d", &diretores[i].filmes[j].AnoDePublicacao);
+            printf("Duração (minutos): ");
+            scanf("%d", &diretores[i].filmes[j].Duracao);
+        }
     }
+}
 
-    // Registro de alugueis
-    for (i = 0; i < 5; i++) {
-        alugueis[i].carro = carros[i];
-        printf("\nAluguel %d\n", i + 1);
-        printf("Digite a data de início (dd/mm/aaaa): ");
-        scanf("%s", alugueis[i].dataInicio);
-        printf("Digite a data de fim (dd/mm/aaaa): ");
-        scanf("%s", alugueis[i].dataFim);
-        printf("Digite o número de dias de aluguel: ");
-        scanf("%d", &dias);
-        alugueis[i].valorTotal = dias * alugueis[i].carro.valorDiaria;
-        getchar(); // Limpar o buffer
+void procurarDiretor(struct Diretor diretores[], int tam, char nome[]){
+    for(int i = 0; i < tam; i++){
+        if(strcmp(diretores[i].NomeDoDiretor, nome) == 0){
+            printf("Filmes de %s:\n", diretores[i].NomeDoDiretor);
+            for(int j = 0; j < diretores[i].QuantidadeDeFilmes; j++){
+                printf("Filme %d:\n", j + 1);
+                printf("Nome: %s\n", diretores[i].filmes[j].NomeDoFilme);
+                printf("Ano: %d\n", diretores[i].filmes[j].AnoDePublicacao);
+                printf("Duração: %d minutos\n", diretores[i].filmes[j].Duracao);
+            }
+            return;
+        }
     }
+    printf("Diretor %s não encontrado.\n", nome);
+}
 
-    // Exibição dos alugueis
-    for (i = 0; i < 5; i++) {
-        printf("\nDetalhes do Aluguel %d:\n", i + 1);
-        printf("Modelo: %s", alugueis[i].carro.modelo);
-        printf("Placa: %s", alugueis[i].carro.placa);
-        printf("Ano: %d\n", alugueis[i].carro.ano);
-        printf("Valor da Diária: %.2lf\n", alugueis[i].carro.valorDiaria);
-        printf("Data de Início: %s\n", alugueis[i].dataInicio);
-        printf("Data de Fim: %s\n", alugueis[i].dataFim);
-        printf("Valor Total: %.2lf\n\n", alugueis[i].valorTotal);
+int main(){
+    struct Diretor diretores[MAX_DIRETORES];
+    char nome[MAX_NOME];
+    preencherDiretores(diretores, MAX_DIRETORES);
+    getchar();
+    while (1) {
+        printf("Digite o nome do diretor (ou enter para sair): ");
+        fgets(nome, MAX_NOME, stdin);
+        nome[strcspn(nome, "\n")] = '\0';
+        if (strlen(nome) == 0) {
+            printf("Saindo...\n");
+            break;
+        }
+        procurarDiretor(diretores, MAX_DIRETORES, nome);
     }
-
+    for (int i = 0; i < MAX_DIRETORES; i++) {
+        free(diretores[i].filmes);
+    }
     return 0;
 }

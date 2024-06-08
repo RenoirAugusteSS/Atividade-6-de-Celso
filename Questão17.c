@@ -1,31 +1,38 @@
 #include <stdio.h>
 
-typedef struct {
-    char nomeCliente[50];
-    char dataReserva[11];
-    int numeroQuarto;
-} Reserva;
+#define NUM_ELETRODOMESTICOS 5
 
-int main() {
-    Reserva reservas[5];
-    int i;
+typedef struct{
+    char NomeDoEletro[16];
+    float PotenciaDoEletro;
+    float TempoDeAtivo;
+} Eletrodomestico;
 
-    for (i = 0; i < 5; i++) {
-        printf("Digite o nome do cliente da reserva %d: ", i + 1);
-        fgets(reservas[i].nomeCliente, 50, stdin);
-        printf("Digite a data da reserva (dd/mm/aaaa): ");
-        scanf("%s", reservas[i].dataReserva);
-        printf("Digite o número do quarto: ");
-        scanf("%d", &reservas[i].numeroQuarto);
-        getchar(); // Limpar o buffer
+int main(){
+    Eletrodomestico eletrodomesticos[NUM_ELETRODOMESTICOS];
+    float ConsumoTotal = 0;
+    float Consumo[NUM_ELETRODOMESTICOS];
+    for (int i = 0; i < NUM_ELETRODOMESTICOS; i++) {
+        printf("Digite o nome do eletrodoméstico %d: ", i + 1);
+        fgets(eletrodomesticos[i].NomeDoEletro, 16, stdin);
+        eletrodomesticos[i].NomeDoEletro[strcspn(eletrodomesticos[i].NomeDoEletro, "\n")] = 0;
+        printf("Digite a potência (em kW) do eletrodoméstico %d: ", i + 1);
+        scanf("%f",&eletrodomesticos[i].PotenciaDoEletro);
+        printf("Digite o tempo ativo por dia (em horas) do eletrodoméstico %d: ", i + 1);
+        scanf("%f",&eletrodomesticos[i].TempoDeAtivo);
+        getchar();
     }
-
-    printf("\nReservas cadastradas:\n");
-    for (i = 0; i < 5; i++) {
-        printf("Nome do Cliente: %s", reservas[i].nomeCliente);
-        printf("Data da Reserva: %s\n", reservas[i].dataReserva);
-        printf("Número do Quarto: %d\n\n", reservas[i].numeroQuarto);
+    float t;
+    printf("Digite o tempo (em dias): ");
+    scanf("%f",&t);
+    for(int i = 0; i < NUM_ELETRODOMESTICOS; i++){
+        Consumo[i] = eletrodomesticos[i].PotenciaDoEletro * eletrodomesticos[i].TempoDeAtivo * t;
+        ConsumoTotal += Consumo[i];
     }
-
+    printf("Consumo total na casa em %.2f dias: %.2f kWh\n", t, ConsumoTotal);
+    for(int i = 0; i < NUM_ELETRODOMESTICOS; i++){
+        float consumoRelativo = (Consumo[i] / ConsumoTotal) * 100;
+        printf("Consumo relativo do eletrodoméstico %s: %.2f%%\n", eletrodomesticos[i].NomeDoEletro, consumoRelativo);
+    }
     return 0;
 }

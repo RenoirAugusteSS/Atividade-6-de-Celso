@@ -1,45 +1,59 @@
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
-    char nome[50];
-    int idade;
-    char sexo;
-    char endereco[100];
-    char telefone[15];
-    char dataConsulta[11];
-} Paciente;
+    char NomeDaReceita[25];
+} Receita;
+
+typedef struct {
+    char NomeDoIngrediente[50];
+    int QuantidadeDeIngrediente;
+} Ingrediente;
 
 int main() {
-    Paciente pacientes[5];
-    int i;
-
-    for (i = 0; i < 5; i++) {
-        printf("Digite o nome do paciente %d: ", i + 1);
-        fgets(pacientes[i].nome, 50, stdin);
-        printf("Digite a idade do paciente %d: ", i + 1);
-        scanf("%d", &pacientes[i].idade);
-        getchar(); // Limpar o buffer
-        printf("Digite o sexo do paciente %d (M/F): ", i + 1);
-        scanf("%c", &pacientes[i].sexo);
-        getchar(); // Limpar o buffer
-        printf("Digite o endereço do paciente %d: ", i + 1);
-        fgets(pacientes[i].endereco, 100, stdin);
-        printf("Digite o telefone do paciente %d: ", i + 1);
-        fgets(pacientes[i].telefone, 15, stdin);
-        printf("Digite a data da consulta (dd/mm/aaaa): ");
-        scanf("%s", pacientes[i].dataConsulta);
-        getchar(); // Limpar o buffer
+    Receita receita[5];
+    Ingrediente ingredientes[5][10]; 
+    int quantidadesDeIngredientes[5];
+    for (int i = 0; i < 5; i++) {
+        printf("Digite o Nome da Receita %d: ", i + 1);
+        fgets(receita[i].NomeDaReceita, 25, stdin);
+        receita[i].NomeDaReceita[strcspn(receita[i].NomeDaReceita, "\n")] = 0;
+        printf("Digite a Quantidade de Ingredientes para a Receita %d: ", i + 1);
+        scanf("%d", &quantidadesDeIngredientes[i]);
+        getchar();
+        for(int x = 0; x < quantidadesDeIngredientes[i]; x++){
+            printf("Digite o Nome do %dº Ingrediente: ", x + 1);
+            fgets(ingredientes[i][x].NomeDoIngrediente, 50, stdin);
+            ingredientes[i][x].NomeDoIngrediente[strcspn(ingredientes[i][x].NomeDoIngrediente, "\n")] = 0;
+            printf("Digite a quantidade em gramas do %dº Ingrediente: ", x + 1);
+            scanf("%d", &ingredientes[i][x].QuantidadeDeIngrediente);
+            getchar();
+        }
     }
-
-    printf("\nPacientes cadastrados:\n");
-    for (i = 0; i < 5; i++) {
-        printf("Nome: %s", pacientes[i].nome);
-        printf("Idade: %d\n", pacientes[i].idade);
-        printf("Sexo: %c\n", pacientes[i].sexo);
-        printf("Endereço: %s", pacientes[i].endereco);
-        printf("Telefone: %s\n", pacientes[i].telefone);
-        printf("Data da Consulta: %s\n\n", pacientes[i].dataConsulta);
+    char pesquisa[25];
+    while (1){
+        printf("Digite o nome da receita para procurar (ou uma string vazia para sair): ");
+        fgets(pesquisa, 25, stdin);
+        pesquisa[strcspn(pesquisa, "\n")] = 0;
+        if(strlen(pesquisa) == 0){
+            printf("Saindo...");
+            break;
+        }
+        int found = 0;
+        for(int i = 0; i < 5; i++){
+            if(strcmp(receita[i].NomeDaReceita, pesquisa) == 0){
+                found = 1;
+                printf("Receita encontrada: %s\n", receita[i].NomeDaReceita);
+                printf("Ingredientes:\n");
+                for (int x = 0; x < quantidadesDeIngredientes[i]; x++) {
+                    printf("Nome: %s, Quantidade: %d gramas\n", ingredientes[i][x].NomeDoIngrediente, ingredientes[i][x].QuantidadeDeIngrediente);
+                }
+                break;
+            }
+        }
+        if (!found) {
+            printf("Receita não encontrada.\n");
+        }
     }
-
     return 0;
 }
